@@ -46,7 +46,7 @@ namespace :ant do
 
   task :jar => :compile do
     ant.jar :basedir => ".", :destfile => "migrations.jar" do
-      fileset :dir => "build" do
+      fileset :dir => "target" do
           include :name => "**/*.class"
       end
       include :name => "src/main/resources/*"
