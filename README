@@ -22,7 +22,7 @@ Usage
 
 3 Run migrations:
 
-  java -cp jruby-complete.jar:migrations-0.1.0.jar migrations.Migrate [OPTIONAL_VERSION_NUMBER]
+  java -Dmigrations.db.name=DB_NAME -cp jruby-complete.jar:migrations-0.1.0.jar migrations.Migrate [OPTIONAL_VERSION_NUMBER]
 
 
 Restrictions
