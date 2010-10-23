@@ -20,28 +20,35 @@ class Migrate {
 
     private static final String GEM_PATH = "jruby/1.8/gems";
 
+    public Migrate() {}
+
     public void migrate(String version) throws Exception {
         String migrations = getMigrationsPath();
         List<String> gemPaths = getGemPaths();
+        String rubyVersion = getRubyVersion(version);
+        String connection = getDbConnection();
 
         ScriptingContainer container = new ScriptingContainer(LocalContextScope.SINGLETHREAD);
         container.setLoadPaths(gemPaths);
 
-        String rubyVersion = "nil";
-        if (version != null && version.length() > 0)
-            rubyVersion = version;
-
         String script =
           "require 'rubygems'\n" +
           "require 'active_record'\n" +
-          "ActiveRecord::Base.establish_connection(" + getDbConnection() + ")\n" +
+          "ActiveRecord::Base.establish_connection(" + connection + ")\n" +
           "ActiveRecord::Migrator.migrate('" + migrations + "', " + rubyVersion + ")";
 
         container.runScriptlet(script);
     }
 
-    public String getMigrationsPath() {
+    private String getMigrationsPath() {
         return getClass().getClassLoader().getResource("db/migrate").toString().replace("jar:", "");
+    }
+
+    private String getRubyVersion(String version) {
+        String rubyVersion = "nil";
+        if (version != null && version.length() > 0)
+            rubyVersion = version;
+        return rubyVersion;
     }
 
     private String getDbConnection() {
@@ -59,6 +66,8 @@ class Migrate {
             builder.append(":host => '").append(host).append("', ");
 
             String database = System.getProperty("migrations.db.name");
+            if (database == null || database.length() == 0)
+                throw new IllegalArgumentException("Invalid database name");
             builder.append(":database => '").append(database).append("', ");
 
             String user = System.getProperty("migrations.db.user", "root");
@@ -71,7 +80,7 @@ class Migrate {
         return builder.append("}").toString();
     }
 
-    public List<String> getGemPaths() throws Exception {
+    private List<String> getGemPaths() throws Exception {
         List<String> gemPaths = new ArrayList<String>();
         String resource = getClass().getClassLoader().getResource(GEM_PATH).toString().replace("jar:", "");
 
