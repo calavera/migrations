@@ -1,0 +1,40 @@
+Migrations
+==========
+
+Run Rails migrations from Java.
+
+Small utility to run Rails migrations from Java, inspired by Yoko's post on
+how to package rubygems in a jar file:
+
+http://yokolet.blogspot.com/2010/10/gems-in-jar-with-redbridge.html
+
+
+Usage
+=====
+
+1. Put your Rails migrations under this directory:
+
+  src/main/resources/db/migrate
+
+2 Create the jar file, I use Buildr:
+
+  buildr migrations:bundle package
+
+3 Run migrations:
+
+  java -cp jruby-complete.jar:migrations-0.1.0.jar migrations.Migrate [OPTIONAL_VERSION_NUMBER]
+
+
+Restrictions
+============
+
+Due to this already resolved bug this library only works with JRuby's trunk version:
+
+  http://jira.codehaus.org/browse/JRUBY-5155
+
+
+Todo
+====
+
+- It's not too much overengineered, let's do it!
+- Note to the maintainer (myself), dear lazy bastard could you add some tests??

@@ -1,0 +1,4 @@
+.bundle
+target
+Gemfile.lock
+jruby
