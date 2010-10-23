@@ -16,9 +16,9 @@ Usage
 
   src/main/resources/db/migrate
 
-2 Create the jar file, I use Buildr:
+2 Create the jar file:
 
-  buildr migrations:bundle package
+  jruby -S rake migrations:bundle ant:jar
 
 3 Run migrations:
 
@@ -37,4 +37,3 @@ Todo
 ====
 
 - It's not too much overengineered, let's do it!
-- Note to the maintainer (myself), dear lazy bastard could you add some tests??
